@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { BrowserProvider, Contract, parseUnits } from 'ethers';
-import tokenABI from '../artifacts/arbitrum-one/usdt/tokenABI.json'; // Import ABI from file
+import tokenABI from '../../artifacts/arbitrum-one/usdt/tokenABI.json'; // Import ABI from file
+import { getContractAddress } from '../../utils/loadContractAddresses'; // Import the utility function
+import { switchNetwork } from '../../utils/networkUtils'; // Import the switchNetwork utility
 
-function ApproveTokenWithABIComponent() {
+function ApprovessTokenWithABIComponent() {
   const [amount, setAmount] = useState('');
-  const tokenAddress = '0x36b0188ebE6ffcE952De77EE28b9bb852443E7Dc'; // Token contract address
-  const spenderAddress = '0xFD6827d6562FdF9797f09946b37F433146D26Ad2'; // Spender address
+  const [networkKey, setNetworkKey] = useState('anotherNetwork'); // Default to arbitrum-sepolia
 
   async function handleApprove() {
     if (!window.ethereum) {
@@ -13,7 +14,19 @@ function ApproveTokenWithABIComponent() {
       return;
     }
 
+    // Fetch the token and spender addresses dynamically based on the selected network
+    const tokenAddress = getContractAddress(networkKey, 'MockTether');
+    const spenderAddress = getContractAddress(networkKey, 'UsdtManager');
+
+    if (!tokenAddress || !spenderAddress) {
+      console.error('Required contract addresses are missing!');
+      return;
+    }
+
     try {
+      // Switch to the selected network
+      await switchNetwork(networkKey);
+
       // Request account access
       await window.ethereum.request({ method: 'eth_requestAccounts' });
 
@@ -39,6 +52,14 @@ function ApproveTokenWithABIComponent() {
 
   return (
     <div>
+      <select
+        value={networkKey}
+        onChange={(e) => setNetworkKey(e.target.value)}
+        style={{ marginBottom: '10px' }}
+      >
+        <option value="arbitrumSepolia">Arbitrum Sepolia</option>
+        <option value="anotherNetwork">Another Network</option>
+      </select>
       <input
         type="number"
         value={amount}
@@ -50,4 +71,4 @@ function ApproveTokenWithABIComponent() {
   );
 }
 
-export default ApproveTokenWithABIComponent;
+export default ApprovessTokenWithABIComponent;

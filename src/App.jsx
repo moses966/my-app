@@ -5,6 +5,9 @@ import GetString from './components/GetString';
 import UpdateString from './components/UpdateString';
 import ApproveTokenComponent from './components/Approve';
 import ApproveTokenWithABIComponent from './components/Approve2';
+import ApprovesTokenWithABIComponent from './components/arbitrum-one/Approve';
+import ApprovessTokenWithABIComponent from './components/arbitrum-one/Approves';
+import WalletConnect from './components/walletConnect';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
         <Route path="/update-string" element={<UpdateString />} />
         <Route path="/approve" element={<ApproveTokenComponent />} />
         <Route path="/approve2" element={<ApproveTokenWithABIComponent />} />
+        <Route path="/approve3" element={<ApprovesTokenWithABIComponent />} />
+        <Route path="/approve4" element={<ApprovessTokenWithABIComponent />} />
+        <Route path="/connect" element={<WalletConnect />} />
         {/* You can add more routes here */}
       </Routes>
     </Router>

@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { BrowserProvider, Contract, parseUnits } from 'ethers';
-import tokenABI from '../artifacts/arbitrum-one/usdt/tokenABI.json'; // Import ABI from file
+import tokenABI from '../../artifacts/arbitrum-one/usdt/tokenABI.json'; // Import ABI from file
+import { getContractAddress } from '../../utils/loadContractAddresses'; // Import the utility function
 
-function ApproveTokenWithABIComponent() {
+function ApprovesTokenWithABIComponent() {
   const [amount, setAmount] = useState('');
-  const tokenAddress = '0x36b0188ebE6ffcE952De77EE28b9bb852443E7Dc'; // Token contract address
-  const spenderAddress = '0xFD6827d6562FdF9797f09946b37F433146D26Ad2'; // Spender address
+
+  // Fetch the token and spender addresses dynamically
+  const tokenAddress = getContractAddress('Usdt'); // Use "Usdt" key from deployments.json
+  const spenderAddress = getContractAddress('Balances'); // Use "Balances" key from deployments.json
 
   async function handleApprove() {
     if (!window.ethereum) {
       console.error('MetaMask is not installed!');
+      return;
+    }
+
+    if (!tokenAddress || !spenderAddress) {
+      console.error('Required contract addresses are missing!');
       return;
     }
 
@@ -50,4 +58,4 @@ function ApproveTokenWithABIComponent() {
   );
 }
 
-export default ApproveTokenWithABIComponent;
+export default ApprovesTokenWithABIComponent;
